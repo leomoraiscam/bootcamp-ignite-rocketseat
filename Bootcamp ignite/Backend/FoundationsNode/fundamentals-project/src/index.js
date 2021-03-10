@@ -7,6 +7,23 @@ app.use(express.json());
 
 const costumers = [];
 
+function veryIfExistAccountCPF(request, response, next) {
+  const { cpf } = request.headers;
+
+  const customer = costumers.find((costomer) => costomer.cpf === cpf);
+
+  if(!customer) {
+    return response.status(400).json({
+      error: 'Customer not exist'
+    });
+  }
+
+  request.customer = customer;
+
+  return next();
+}
+
+
 app.post('/account', (request, response) => {
   const { cpf, name } = request.body;
 
@@ -28,20 +45,11 @@ app.post('/account', (request, response) => {
   return response.status(201).send();
 });
 
-app.get('/statement', (request, response) => {
-  const { cpf } = request.headers;
+app.get('/statement', veryIfExistAccountCPF ,(request, response) => {
+  const { customer } = request;
 
-  const custumer = costumers.find((costumer) => costumer.cpf === cpf);
-
-  if(!custumer) {
-    return response.status(400).json({
-      error: 'Customer not found'
-    });
-  }
-
-  return response.status(200).json(custumer.statement);
+  return response.status(200).json(customer.statement);
 });
-
 
 app.listen(3333, () => {
   console.log('🚀 Server is running')
