@@ -23,7 +23,6 @@ function veryIfExistAccountCPF(request, response, next) {
   return next();
 }
 
-
 app.post('/account', (request, response) => {
   const { cpf, name } = request.body;
 
@@ -49,6 +48,23 @@ app.get('/statement', veryIfExistAccountCPF ,(request, response) => {
   const { customer } = request;
 
   return response.status(200).json(customer.statement);
+});
+
+app.post('/deposit', veryIfExistAccountCPF, (request, response) => {
+  const { description, amount } = request.body;
+
+  const { customer } = request;
+
+  const statementOperation = {
+    description,
+    amount,
+    created_at: new Date(),
+    type: 'credit'
+  };
+
+  customer.statement.push(statementOperation);
+
+  return response.status(201).send();
 });
 
 app.listen(3333, () => {
