@@ -117,6 +117,36 @@ app.get('/statement/date', veryIfExistAccountCPF ,(request, response) => {
   return response.status(200).json(statement);
 });
 
+app.put('/account', veryIfExistAccountCPF ,(request, response) => {
+  const { name } = request.body;
+  const { customer } = request;
+
+  customer.name = name;
+
+  response.status(201).send();
+});
+
+app.get('/account', veryIfExistAccountCPF, (request, response) => {
+  const { customer } = request;
+
+  return response.status(200).json(customer);
+});
+
+app.delete('/account', veryIfExistAccountCPF, (request, response) => {
+  const { customer } = request;
+
+  costumers.splice(customer, 1);
+
+  return response.status(200).json(customer);
+});
+
+app.get('/balance', veryIfExistAccountCPF, (request, response) => {
+  const { customer } = request;
+
+  const balance = getBalance(customer.statement);
+
+  return response.status(200).json(balance);
+});
 
 app.listen(3333, () => {
   console.log('🚀 Server is running')
