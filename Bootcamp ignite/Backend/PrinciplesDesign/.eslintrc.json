@@ -36,11 +36,11 @@
       }
     ],
     "class-methods-use-this": "off",
-    "import/prefer-default-export": "off",
+    "import/prefer-default-export": "warn",
     "no-shadow": "off",
     "no-console": "error",
     "no-useless-constructor": "off",
-    "no-empty-function": "off",
+    "no-empty-function": "warn",
     "lines-between-class-members": "off",
     "import/extensions": [
       "error",
